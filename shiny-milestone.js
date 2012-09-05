@@ -6,9 +6,6 @@ var github = new GitHubApi({
     version: "3.0.0"
 });
 
-fs.writeFileSync('index.html', '<link rel="stylesheet" href="style.css">')
-fs.appendFileSync('index.html', '<h1 class="page-title">Release Notes</h1>')
-fs.appendFileSync('index.html', '<h2 class="release-title">2.8.0</h2>');
 
 fs.readFile('.config', 'utf-8', function(err, data) {
   var config = JSON.parse(data);
@@ -18,6 +15,10 @@ fs.readFile('.config', 'utf-8', function(err, data) {
     username: config.username,
     password: config.password
   });
+
+  fs.writeFileSync('index.html', '<link rel="stylesheet" href="style.css">')
+  fs.appendFileSync('index.html', '<h1 class="page-title">Release Notes</h1>')
+  fs.appendFileSync('index.html', '<h2 class="release-title">' + config.milestone + '</h2>');
 
   getRepo(config);
 });
