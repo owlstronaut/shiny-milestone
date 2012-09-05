@@ -1,0 +1,7 @@
+{
+  "username": "username",
+  "password": "password",
+  "org": "Organization-Name",
+  "repo": "Repository-Name",
+  "milestone": "1.0.0"
+}

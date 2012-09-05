@@ -1,0 +1,16 @@
+html {margin-left: 10%;}
+body {background-color: #EEE;}
+h1.page-title {color: #444; margin-top: 5%;}
+h2.release-title {color: #444;}
+
+
+.label {
+  padding: 1px 6px; 
+  margin: 0 5px; 
+  border-radius: 3px; 
+  color: #FFF; 
+  font-weight: bold; 
+  font-size: 80%;
+  text-shadow: 1px 1px 0 #444;
+}
+.issue-title {color: #666;}

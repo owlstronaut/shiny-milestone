@@ -1,0 +1,2 @@
+In order to list the open/closed issues for an item, configure your ".config_example"
+and rename it to ".config". Then run `node shiny-milestone.js` to generate the html file.
