@@ -50,11 +50,13 @@ function useRepo(repo, config) {
 function useIssues(issues, config) {
   _.each(issues, function(issue) {
     if (issue && issue.milestone && issue.milestone.title == config.milestone) {
+      fs.appendFileSync('index.html', '<div class="issue-line">');
       _.each(issue.labels, function(label) {
         fs.appendFileSync('index.html', '<span class="label" style="background-color: #' + label.color + '">' + label.name + '</span>');
       });
       fs.appendFileSync('index.html', '<span class="issue-title">' + issue.title + '</span>');
       fs.appendFileSync('index.html', '<br>');
+      fs.appendFileSync('index.html', '</div>');
     }
   });
 }
