@@ -18,7 +18,7 @@ fs.readFile('.config', 'utf-8', function(err, data) {
 
   fs.writeFileSync('index.html', '<link rel="stylesheet" href="style.css">')
   fs.appendFileSync('index.html', '<h1 class="page-title">Release Notes</h1>')
-  fs.appendFileSync('index.html', '<h2 class="release-title">' + config.milestone + '</h2>');
+  fs.appendFileSync('index.html', _.template('<h2 class="release-title"><%= milestone %></h2>')(config));
 
   getRepo(config);
 });
@@ -48,13 +48,15 @@ function useRepo(repo, config) {
 }
 
 function useIssues(issues, config) {
+  issues = _.sortBy(issues, 'number');
+
   _.each(issues, function(issue) {
     if (issue && issue.milestone && issue.milestone.title == config.milestone) {
-      fs.appendFileSync('index.html', '<div class="issue-line">');
+      fs.appendFileSync('index.html', _.template('<div class="issue-line" data-assignee="<%= assignee.login %>">')(issue));
       _.each(issue.labels, function(label) {
-        fs.appendFileSync('index.html', '<span class="label" style="background-color: #' + label.color + '">' + label.name + '</span>');
+        fs.appendFileSync('index.html', _.template('<span class="label" style="background-color: #<%= color %>"><%= name %></span>')(label));
       });
-      fs.appendFileSync('index.html', '<span class="issue-title">' + issue.title + '</span>');
+      fs.appendFileSync('index.html', _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
       fs.appendFileSync('index.html', '<br>');
       fs.appendFileSync('index.html', '</div>');
     }
