@@ -59,7 +59,7 @@ function useIssues(issues, config) {
       });
       fs.appendFileSync('index.html', _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
       fs.appendFileSync('index.html', '<br>');
-      fs.appendFileSync('index.html', _.template('<span class="issue-body" style="display: none"><pre><img data-placement="right" rel="tooltip" title="<%= user.login %>" src="<%= user.avatar_url %>">\n\n<%= body %></pre></span>')(issue));
+      fs.appendFileSync('index.html', _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" data-placement="right" rel="tooltip" title="<%= user.login %>" src="<%= user.avatar_url %>">\n\n<%= body %></pre></span>')(issue));
       fs.appendFileSync('index.html', '</div>');
     }
   });
