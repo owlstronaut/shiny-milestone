@@ -15,8 +15,7 @@ function toggleIssue(evt) {
 
 function setupSortBy() {
   var label_names = getLabelNames();
-  var issue_states = getIssueStates();
-  var labels = _.uniq(issue_states.concat(label_names));
+  var labels = _.uniq(label_names);
 
   var sort_by = $(document).find('.sort-by');
   _.each(labels, function(label_data) {
@@ -29,7 +28,29 @@ function setupSortBy() {
 function updateVisible(evt) {
   $(evt.currentTarget).toggleClass('active');
 
-  
+  _.each($('.issue-line'), function(issue_line) {
+    var data_names = getDataNamesFromIssueLine(issue_line);
+    updateVisibleLines(data_names, issue_line);
+  });
+}
+
+function getDataNamesFromIssueLine(issue_line) {
+  return _.map($(issue_line).find('.label'), function(label) {
+    return $(label).attr('data-name');
+  });
+}
+
+function updateVisibleLines(data_names, issue_line) {
+  var active_labels = getActiveLabels();
+
+  if (_.intersection(data_names, active_labels).length)
+    $(issue_line).show();
+  else
+    $(issue_line).hide();
+}
+
+function getActiveLabels() {
+  return _.map($(document).find('.sort-by .active.label-filter'), function(label) {return $(label).attr('data-label');});
 }
 
 function getLabelNames() {
