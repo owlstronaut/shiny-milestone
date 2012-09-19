@@ -1,13 +1,33 @@
 $(document).ready(function() {
 
   $(document).on('click', '.issue-title', toggleIssue);
-  if ($("[rel=tooltip]").length) {
-    $("[rel=tooltip]").tooltip({});
-  }
-
+  enableTooltips();
   setupSortBy();
-
+  setupCollapse();
 });
+
+function setupCollapse() {
+  var sort_by = $(document).find('.sort-by');
+  var collapse = $('<span class="collapse-issues btn">Collapse All</span>');
+  collapse.click(onCollapse);
+  sort_by.append(collapse);
+}
+
+function onCollapse() {
+  _.each($('.issue-title'), function(issue_title) {
+    if (isIssueVisible(issue_title))
+      toggleIssue({'target': issue_title});
+  });
+}
+
+function isIssueVisible(issue_title) {
+  return $(issue_title).siblings('.issue-body').css('display') != 'none';
+}
+
+function enableTooltips() {
+  if ($("[rel=tooltip]").length)
+    $("[rel=tooltip]").tooltip({});
+}
 
 function toggleIssue(evt) {
   $(evt.target).siblings('.issue-body').toggle();

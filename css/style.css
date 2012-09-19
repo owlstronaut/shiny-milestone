@@ -1,13 +1,14 @@
 html {margin-left: 10%;}
-body {background-color: #EEE; font-size: 102%;}
+body {background-color: #EEE; font-size: 102%; margin-bottom: 30px;}
 h1.page-title {color: #444; margin-top: 5%;}
 h2.release-title {color: #444; font-size: 125%; display: inline-block;}
 a, a:visited {color: #00C;}
 a:hover {color: #090;}
 s {text-decoration: none}
 
-.sort-by {display: inline-block; margin-left: 15px;}
+.sort-by {display: inline-block; margin-left: 15px; width: 45%; position: relative; top: -3px;}
 .sort-by .label-filter {margin-left: 5px; -webkit-user-select: none;}
+.sort-by .collapse-issues {float: right;}
 
 .issue-line {
   margin: 3px 0;
