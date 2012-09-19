@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 function setupCollapse() {
   var sort_by = $(document).find('.sort-by');
-  var collapse = $('<span class="collapse-issues btn">Collapse All</span>');
+  var collapse = $('<span class="collapse-issues btn">collapse all</span>');
   collapse.click(onCollapse);
   sort_by.append(collapse);
 }
