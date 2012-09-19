@@ -6,9 +6,9 @@ a, a:visited {color: #00C;}
 a:hover {color: #090;}
 s {text-decoration: none}
 
-.sort-by {display: inline-block; margin-left: 15px; width: 45%; position: relative; top: -3px;}
-.sort-by .label-filter {margin-left: 5px; -webkit-user-select: none;}
-.sort-by .collapse-issues {float: right;}
+.sort-by {display: inline-block; margin-left: 15px; width: 45%; position: relative; top: -3px; -webkit-user-select: none;}
+.sort-by .label-filter {margin-left: 5px;}
+.sort-by .collapse-issues {float: right; position: relative; top: -5px;}
 
 .issue-line {
   margin: 3px 0;

@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   $(document).on('click', '.issue-title', toggleIssue);
   enableTooltips();
   setupSortBy();
@@ -38,8 +37,9 @@ function setupSortBy() {
   var labels = _.uniq(label_names);
 
   var sort_by = $(document).find('.sort-by');
+  var label;
   _.each(labels, function(label_data) {
-    var label = $(_.template('<span data-label="<%= label_data %>" class="active label-filter btn btn-mini"><%= label_data %></span>')({'label_data': label_data}));
+    label = $(_.template('<span data-label="<%= label_data %>" class="active label-filter btn btn-mini"><%= label_data %></span>')({'label_data': label_data}));
     label.click(updateVisible.bind(label));
     sort_by.append(label);
   });
@@ -48,8 +48,9 @@ function setupSortBy() {
 function updateVisible(evt) {
   $(evt.currentTarget).toggleClass('active');
 
+  var data_names;
   _.each($('.issue-line'), function(issue_line) {
-    var data_names = getDataNamesFromIssueLine(issue_line);
+    data_names = getDataNamesFromIssueLine(issue_line);
     updateVisibleLines(data_names, issue_line);
   });
 }
