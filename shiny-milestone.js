@@ -56,8 +56,6 @@ function useIssues(issues, config) {
       if (!issue.assignee)
         issue.assignee = {'login': 'unassigned', 'avatar_url': 'http://octodex.github.com/images/nyantocat.gif'};
 
-      if (issue.number == 488)
-        debugger
       fs.appendFileSync('index.html', _.template('<div class="issue-line" data-assignee="<%= assignee.login %>" data-assignee-avatar-url="<%= assignee.avatar_url %>" data-state="<%= state %>">')(issue));
       _.each(issue.labels, function(label) {
         fs.appendFileSync('index.html', _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>')(label));
