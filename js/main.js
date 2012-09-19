@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   $(document).on('click', '.issue-title', toggleIssue);
   if ($("[rel=tooltip]").length) {
-    $("[rel=tooltip]").tooltip();
+    $("[rel=tooltip]").tooltip({});
   }
 
   setupSortBy();

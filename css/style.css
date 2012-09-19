@@ -34,4 +34,5 @@ s {text-decoration: none}
   margin: 5px;
 }
 
+.tooltip img {width: 80px; height: 80px;}
 .usr-img {width: 80px; height: 80px;}
