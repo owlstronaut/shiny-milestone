@@ -89,4 +89,6 @@ function useIssues(issues, config) {
       fs.appendFileSync('index.html', '</div>');
     }
   });
+
+  fs.appendFileSync('index.html', '<div class="no-issues">No issues match the selected filters.</div>');
 }
