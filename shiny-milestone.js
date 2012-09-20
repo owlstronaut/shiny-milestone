@@ -16,7 +16,7 @@ fs.readFile('.config', 'utf-8', function(err, data) {
     password: config.password
   });
 
-  fs.writeFileSync('index.html', '<link rel="stylesheet" href="css/bootstrap.css">');
+  fs.writeFileSync('index.html', '<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">');
   fs.appendFileSync('index.html', '<link rel="stylesheet" href="css/style.css">');
   fs.appendFileSync('index.html', '<h1 class="page-title">Release Notes</h1>');
   fs.appendFileSync('index.html', _.template('<h2 class="release-title"><%= milestone %></h2>')(config));
