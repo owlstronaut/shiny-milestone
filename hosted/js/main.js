@@ -14,12 +14,27 @@ function setupCollapse() {
 
 function onCollapse() {
   _.each($('.issue-title'), function(issue_title) {
-    if (isIssueVisible(issue_title))
+    if (isIssueBodyVisible(issue_title))
       toggleIssue({'target': issue_title});
   });
 }
 
+function isAnyIssueVisible() {
+  var issue_titles = _.map($('.issue-title'), function(issue_title) {
+    return isIssueVisible(issue_title);
+  });
+
+  if (!_.any(issue_titles))
+    $('.no-issues').show();
+  else
+    $('.no-issues').hide();
+}
+
 function isIssueVisible(issue_title) {
+  return $(issue_title).is(':visible');
+}
+
+function isIssueBodyVisible(issue_title) {
   return $(issue_title).siblings('.issue-body').css('display') != 'none';
 }
 
@@ -53,6 +68,8 @@ function updateVisible(evt) {
     data_names = getDataNamesFromIssueLine(issue_line);
     updateVisibleLines(data_names, issue_line);
   });
+
+  isAnyIssueVisible();
 }
 
 function getDataNamesFromIssueLine(issue_line) {

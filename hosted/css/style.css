@@ -37,3 +37,9 @@ s {text-decoration: none}
 
 .tooltip img {width: 80px; height: 80px;}
 .usr-img {width: 80px; height: 80px;}
+.no-issues {
+  display: none;
+  color: #666;
+  margin-left: 3px;
+  padding: 0 5px;
+}
