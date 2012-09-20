@@ -17,7 +17,7 @@ fs.readFile('.config', 'utf-8', function(err, data) {
   });
 
   fs.writeFileSync('index.html', '<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">');
-  fs.appendFileSync('index.html', '<link rel="stylesheet" href="http://devsmithy.com/hosted/css/style.css">');
+  fs.appendFileSync('index.html', '<link href="http://devsmithy.com/hosted/css/style.css" rel="stylesheet">');
   fs.appendFileSync('index.html', '<h1 class="page-title">Release Notes</h1>');
   fs.appendFileSync('index.html', _.template('<h2 class="release-title"><%= milestone %></h2>')(config));
   fs.appendFileSync('index.html', '<div class="sort-by"></div>')
@@ -27,21 +27,44 @@ fs.readFile('.config', 'utf-8', function(err, data) {
   fs.appendFileSync('index.html', '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>');
   fs.appendFileSync('index.html', '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/2.0.0/underscore.string.min.js"></script>');
   fs.appendFileSync('index.html', '<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.0/bootstrap.min.js"></script>');
-  fs.appendFileSync('index.html', '<script src="http://devsmithy.com/hosted/js/main.js"></script>');
+  fs.appendFileSync('index.html', '<script src="http://devsmithy.com/hosted/main.js"></script>');
 });
 
 function getRepo(config) {
+  if (config.org)
+    getRepoFromOrg(config);
+  else
+    getRepoFromUser(config);
+}
+
+function getRepoFromOrg(config) {
   github.repos.getFromOrg({'org': config.org}, function(err, repos) {
     var repo = _.find(repos, function(repo){return repo.name == config.repo;});
     
     if (repo)
       useRepo(repo, config);
+    else
+      console.log('No repository retrieved: ' + repo);
+  });
+}
+
+function getRepoFromUser(config) {
+  github.repos.getAll({'type': 'all'}, function(err, repos) {
+    var repo = _.find(repos, function(repo){return repo.name == config.repo;});
+
+    if (repo)
+      useRepo(repo, config);
+    else
+      console.log('No repository retrieved: ' + repo);
   });
 }
 
 function useRepo(repo, config) {
-  github.issues.repoIssues({'user': config.org, 'repo': repo.name, 'state': 'closed'}, function(err, closed_issues) {
-    github.issues.repoIssues({'user': config.org, 'repo': repo.name, 'state': 'open'}, function(err, open_issues) {
+  var user = config.org || config.username;
+  var repo_name = repo.name;
+
+  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'closed'}, function(err, closed_issues) {
+    github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'open'}, function(err, open_issues) {
       var issues = closed_issues.concat(open_issues);
       useIssues(issues, config);
     });
