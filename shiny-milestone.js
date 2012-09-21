@@ -120,7 +120,7 @@ function useIssues(issues) {
       });
       fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
       fs.appendFileSync(config.name, '<br>');
-      fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name"><%= user.login %></span>\n\n<%= body %></pre></span>')(issue));
+      fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>')(issue));
       fs.appendFileSync(config.name, '</div>');
     }
   });
