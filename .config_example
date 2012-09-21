@@ -3,5 +3,6 @@
   "org": "Organization-Name",
   "repo": "Repository-Name",
   "milestone": "1.0.0",
-  "name": "index.html"
+  "name": "index.html",
+  "include_open_issues": true
 }

@@ -88,11 +88,21 @@ function useRepo(repo) {
   var repo_name = repo.name;
 
   github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'closed'}, function(err, closed_issues) {
-    github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'open'}, function(err, open_issues) {
-      var issues = closed_issues.concat(open_issues);
-      console.log('Found ' + issues.length + ' Repository Issues');
-      useIssues(issues);
-    });
+    if (config.include_open_issues) {
+      includeOpenIssues(user, repo_name, closed_issues);
+    }
+    else {
+      console.log('Found ' + closed_issues.length + ' Closed Repository Issues');
+      useIssues(closed_issues);
+    }
+  });
+}
+
+function includeOpenIssues(user, repo_name, closed_issues) {
+  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'open'}, function(err, open_issues) {
+    var issues = closed_issues.concat(open_issues);
+    console.log('Found ' + issues.length + ' Open/Closed Repository Issues');
+    useIssues(issues);
   });
 }
 
