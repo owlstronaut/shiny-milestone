@@ -10,6 +10,9 @@ var github = new GitHubApi({
 var config;
 promptForPassword();
 
+// Debugging
+// startApplication(password);
+
 function promptForPassword() {
  var prompt_props = [{'name': 'password', 'hidden': true}];
   prompt.start();
@@ -87,9 +90,20 @@ function useRepo(repo) {
   var user = config.org || config.username;
   var repo_name = repo.name;
 
-  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'closed'}, function(err, closed_issues) {
+  github.issues.getAllMilestones({'user': user, 'repo': repo_name}, function(err, milestones) {
+    var milestone = _.find(milestones, function(milestone){return milestone.title == config.milestone;});
+    console.log(_.template('Found Milestone <%= title %>')(milestone));
+    includeClosedIssues(user, repo_name, milestone.number);
+  });
+}
+
+function includeClosedIssues(user, repo_name, milestone) {
+  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'closed', 'milestone': milestone, 'per_page': 100}, function(err, closed_issues) {
+    if (err)
+      throw err;
+
     if (config.include_open_issues) {
-      includeOpenIssues(user, repo_name, closed_issues);
+      includeOpenIssues(user, repo_name, closed_issues, milestone);
     }
     else {
       console.log('Found ' + closed_issues.length + ' Closed Repository Issues');
@@ -98,8 +112,11 @@ function useRepo(repo) {
   });
 }
 
-function includeOpenIssues(user, repo_name, closed_issues) {
-  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'open'}, function(err, open_issues) {
+function includeOpenIssues(user, repo_name, closed_issues, milestone) {
+  github.issues.repoIssues({'user': user, 'repo': repo_name, 'state': 'open', 'milestone': milestone, 'per_page': 100}, function(err, open_issues) {
+    if (err)
+      throw err;
+
     var issues = closed_issues.concat(open_issues);
     console.log('Found ' + issues.length + ' Open/Closed Repository Issues');
     useIssues(issues);
@@ -110,19 +127,17 @@ function useIssues(issues) {
   issues = _.sortBy(issues, 'number');
 
   _.each(issues, function(issue) {
-    if (issue && issue.milestone && issue.milestone.title == config.milestone) {
-      if (!issue.assignee)
-        issue.assignee = {'login': 'unassigned', 'avatar_url': 'http://octodex.github.com/images/nyantocat.gif'};
+    if (!issue.assignee)
+      issue.assignee = {'login': 'unassigned', 'avatar_url': 'http://octodex.github.com/images/nyantocat.gif'};
 
-      fs.appendFileSync(config.name, _.template('<div class="issue-line" rel="tooltip" data-placement="left" title="<%= assignee.login %><br><img src=<%= assignee.avatar_url %>>" data-assignee="<%= assignee.login %>" data-assignee-avatar-url="<%= assignee.avatar_url %>" data-state="<%= state %>">')(issue));
-      _.each(issue.labels, function(label) {
-        fs.appendFileSync(config.name, _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>')(label));
-      });
-      fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
-      fs.appendFileSync(config.name, '<br>');
-      fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>')(issue));
-      fs.appendFileSync(config.name, '</div>');
-    }
+    fs.appendFileSync(config.name, _.template('<div class="issue-line" rel="tooltip" data-placement="left" title="<%= assignee.login %><br><img src=<%= assignee.avatar_url %>>" data-assignee="<%= assignee.login %>" data-assignee-avatar-url="<%= assignee.avatar_url %>" data-state="<%= state %>">')(issue));
+    _.each(issue.labels, function(label) {
+      fs.appendFileSync(config.name, _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>')(label));
+    });
+    fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
+    fs.appendFileSync(config.name, '<br>');
+    fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>')(issue));
+    fs.appendFileSync(config.name, '</div>');
   });
 
   fs.appendFileSync(config.name, '<div class="no-issues">No issues match the selected filters.</div>');
