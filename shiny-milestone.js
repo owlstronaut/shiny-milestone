@@ -90,10 +90,19 @@ function useRepo(repo) {
   var user = config.org || config.username;
   var repo_name = repo.name;
 
-  github.issues.getAllMilestones({'user': user, 'repo': repo_name}, function(err, milestones) {
-    var milestone = _.find(milestones, function(milestone){return milestone.title == config.milestone;});
-    console.log(_.template('Found Milestone <%= title %>')(milestone));
-    includeClosedIssues(user, repo_name, milestone.number);
+  github.issues.getAllMilestones({'user': user, 'repo': repo_name, 'state': 'open'}, function(err, open_milestones) {
+    github.issues.getAllMilestones({'user': user, 'repo': repo_name, 'state': 'closed'}, function(err, closed_milestones) {
+      var milestones = open_milestones.concat(closed_milestones);
+      var milestone = _.find(milestones, function(milestone) {return milestone.title == config.milestone;});
+
+      if (milestone) {
+        console.log(_.template('Found Milestone <%= title %>')({'title': config.milestone}));
+        includeClosedIssues(user, repo_name, milestone.number);
+      }
+      else {
+        console.log('Milestone not found.');
+      }
+    });
   });
 }
 
@@ -125,6 +134,8 @@ function includeOpenIssues(user, repo_name, closed_issues, milestone) {
 
 function useIssues(issues) {
   issues = _.sortBy(issues, 'number');
+
+  fs.appendFileSync(config.name, _.template('<label class="num-found">Found <%= issues %> items in milestone <%= milestone %></label>')({'issues': issues.length, 'milestone': config.milestone}))
 
   _.each(issues, function(issue) {
     if (!issue.assignee)
