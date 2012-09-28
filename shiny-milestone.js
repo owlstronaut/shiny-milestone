@@ -36,18 +36,18 @@ function startApplication(password) {
     });
     console.log('Authenticated Credentials');
 
-    fs.writeFileSync(config.name, '<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">');
-    fs.appendFileSync(config.name, '<link href="http://devsmithy.com/hosted/css/style.css" rel="stylesheet">');
-    fs.appendFileSync(config.name, '<h1 class="page-title">Release Notes</h1>');
-    fs.appendFileSync(config.name, _.template('<h2 class="release-title"><%= milestone %></h2>')(config));
-    fs.appendFileSync(config.name, '<div class="sort-by"></div>');
+    fs.writeFileSync(config.name, '<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">\n');
+    fs.appendFileSync(config.name, '<link href="http://devsmithy.com/hosted/css/style.css" rel="stylesheet">\n');
+    fs.appendFileSync(config.name, '<h1 class="page-title">Release Notes</h1>\n');
+    fs.appendFileSync(config.name, _.template('<h2 class="release-title"><%= milestone %></h2>\n')(config));
+    fs.appendFileSync(config.name, '<div class="sort-by"></div>\n');
 
     getRepo();
-    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>');
-    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>');
-    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/2.0.0/underscore.string.min.js"></script>');
-    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.0/bootstrap.min.js"></script>');
-    fs.appendFileSync(config.name, '<script src="http://devsmithy.com/hosted/main.js"></script>');
+    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>\n');
+    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js"></script>\n');
+    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/2.0.0/underscore.string.min.js"></script>\n');
+    fs.appendFileSync(config.name, '<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.0/bootstrap.min.js"></script>\n');
+    fs.appendFileSync(config.name, '<script src="http://devsmithy.com/hosted/js/main.js"></script>\n');
   });
 }
 
@@ -135,22 +135,22 @@ function includeOpenIssues(user, repo_name, closed_issues, milestone) {
 function useIssues(issues) {
   issues = _.sortBy(issues, 'number');
 
-  fs.appendFileSync(config.name, _.template('<label class="num-found">Found <%= issues %> items in milestone <%= milestone %></label>')({'issues': issues.length, 'milestone': config.milestone}))
+  fs.appendFileSync(config.name, _.template('<div class="milestone-info"><label class="num-found">Found <%= issues %> items in milestone <%= milestone %> <span class="filtered"></span></label></div>')({'issues': issues.length, 'milestone': config.milestone}))
 
   _.each(issues, function(issue) {
     if (!issue.assignee)
       issue.assignee = {'login': 'unassigned', 'avatar_url': 'http://octodex.github.com/images/nyantocat.gif'};
 
-    fs.appendFileSync(config.name, _.template('<div class="issue-line" rel="tooltip" data-placement="left" title="<%= assignee.login %><br><img src=<%= assignee.avatar_url %>>" data-assignee="<%= assignee.login %>" data-assignee-avatar-url="<%= assignee.avatar_url %>" data-state="<%= state %>">')(issue));
+    fs.appendFileSync(config.name, _.template('<div class="issue-line" rel="tooltip" data-placement="left" title="<%= assignee.login %><br><img src=<%= assignee.avatar_url %>>" data-assignee="<%= assignee.login %>" data-assignee-avatar-url="<%= assignee.avatar_url %>" data-state="<%= state %>">\n')(issue));
     _.each(issue.labels, function(label) {
-      fs.appendFileSync(config.name, _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>')(label));
+      fs.appendFileSync(config.name, _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>\n')(label));
     });
-    fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>')(issue));
+    fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>\n')(issue));
     fs.appendFileSync(config.name, '<br>');
-    fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>')(issue));
+    fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>\n')(issue));
     fs.appendFileSync(config.name, '</div>');
   });
 
-  fs.appendFileSync(config.name, '<div class="no-issues">No issues match the selected filters.</div>');
+  fs.appendFileSync(config.name, '<div class="no-issues">No issues match the selected filters.</div>\n');
   console.log('Done Generating ' + config.name);
 }

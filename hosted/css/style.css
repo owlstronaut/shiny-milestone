@@ -7,7 +7,7 @@ a:hover {color: #090;}
 s {text-decoration: none}
 
 .sort-by {display: inline-block; margin-left: 15px; width: 45%; position: relative; top: -3px; -webkit-user-select: none;}
-.sort-by .label-filter {margin-left: 5px;}
+.sort-by .label-filter {margin-left: 5px; margin-top: 2px;}
 .sort-by .collapse-issues {float: right; position: relative; top: -5px;}
 
 .issue-line {
@@ -44,3 +44,5 @@ s {text-decoration: none}
   margin-left: 3px;
   padding: 0 5px;
 }
+
+.milestone-info .filtered {font-size: 75%;}
