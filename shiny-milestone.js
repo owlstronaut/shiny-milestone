@@ -145,7 +145,7 @@ function useIssues(issues) {
     _.each(issue.labels, function(label) {
       fs.appendFileSync(config.name, _.template('<span data-name="<%= name %>" class="label" style="background-color: #<%= color %>"><%= name %></span>\n')(label));
     });
-    fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>">Issue #<%= number %></a>)</span>\n')(issue));
+    fs.appendFileSync(config.name, _.template('<span class="issue-title"><%= title %> (<a href="<%= html_url %>" target="_blank">Issue #<%= number %></a>)</span>\n')(issue));
     fs.appendFileSync(config.name, '<br>');
     fs.appendFileSync(config.name, _.template('<span class="issue-body" style="display: none"><pre><img class="usr-img" src="<%= user.avatar_url %>"><span class="usr-name">Creator: <%= user.login %></span>\n\n<%= body %></pre></span>\n')(issue));
     fs.appendFileSync(config.name, '</div>');
